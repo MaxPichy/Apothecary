@@ -71,11 +71,7 @@ export default function Dashboard() {
     stock: 0,
     expiration: '',
   });
-
-  useEffect(() => {
-    loadIngredients();
-  }, []);
-
+  
   const loadIngredients = async () => {
     try {
       setLoading(true);
@@ -86,6 +82,10 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    loadIngredients();
+  }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
