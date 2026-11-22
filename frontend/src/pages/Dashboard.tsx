@@ -74,15 +74,15 @@ export default function Dashboard() {
   
   const loadIngredients = async () => {
     try {
-      setLoading(true);
-      setIngredients(await api.getIngredients());
+      const data = await api.getIngredients();
+      setIngredients(data);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erro desconhecido ao carregar.');
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
-  
+
   useEffect(() => {
     loadIngredients();
   }, []);
