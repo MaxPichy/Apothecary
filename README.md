@@ -1,224 +1,84 @@
-# 🧪 Apothecary API
+# 🧪 Apothecary - Monorepo (Frontend + Backend)
 
-API RESTful para gerenciamento de ingredientes de um apotecário, permitindo o cadastro, consulta, atualização e remoção de ingredientes com controle geral de cadastro; dados como nome, preço, estoque, descrição e data de validade.
+Este repositório contém a solução completa para o sistema **Apothecary**, dividido em duas aplicações principais:
+- **Backend (`/backend`)**: API RESTful em Node.js, Express e TypeScript com PostgreSQL.
+- **Frontend (`/frontend`)**: Single Page Application (SPA) em React, TypeScript e shadcn/ui.
 
 Projeto desenvolvido para as disciplinas **Laboratório de Desenvolvimento Web (LDW)** e **Integração e Entrega Contínua (IEC)**.
 
 ---
 
-## Tecnologias
+## 🏗️ Arquitetura do Projeto
 
-- **Node.js** + **TypeScript**
-- **Express** — framework HTTP
-- **Sequelize** — ORM para PostgreSQL
-- **PostgreSQL** — banco de dados relacional (Supabase ou local via Docker)
-- **Swagger (OpenAPI 3.0)** — documentação interativa
-- **Docker** + **Docker Compose** — containerização
-- **GitHub Actions** — pipeline de CI
-- **ESLint** + **Prettier** — padronização de código
-- **Husky** + **lint-staged** — Git hooks
-- **pnpm** — gerenciador de pacotes
+O projeto utiliza a estrutura de **Monorepo** gerenciada pelo **pnpm Workspaces**. Isso permite compartilhar dependências e rodar ambos os projetos com um único comando.
 
----
-
-## Pré-requisitos
-
-- [Node.js 20+](https://nodejs.org/)
-- [pnpm](https://pnpm.io/installation) (`npm install -g pnpm` ou `corepack enable pnpm`)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (opcional, para rodar com containers)
-- Uma instância PostgreSQL — pode ser:
-  - Local (Docker Compose)
-  - Na nuvem ([Supabase](https://supabase.com/) — gratuito)
-
----
-
-## Instalação
-
-Clone o repositório e instale as dependências:
-
-```bash
-git clone https://github.com/<seu-usuario>/<seu-repo>.git
-cd Apothecary
-pnpm install
-```
-
----
-
-## Configuração do Ambiente
-
-Copie o arquivo de exemplo e preencha as variáveis:
-
-```bash
-cp .env.example .env
-```
-
-Variáveis disponíveis:
-
-| Variável      | Descrição              | Exemplo                             |
-| ------------- | ---------------------- | ----------------------------------- |
-| `PORT`        | Porta do servidor HTTP | `3000`                              |
-| `DB_NAME`     | Nome do banco de dados | `apothecary`                        |
-| `DB_USER`     | Usuário do PostgreSQL  | `postgres`                          |
-| `DB_PASSWORD` | Senha do banco         | `sua_senha`                         |
-| `DB_HOST`     | Host do banco          | `localhost` ou `db.xxx.supabase.co` |
-| `DB_PORT`     | Porta do banco         | `5432`                              |
-| `DB_SSL`      | Habilitar SSL          | `false` (local) / `true` (Supabase) |
-
-> !! **Nunca** commite o arquivo `.env` — ele já está no `.gitignore`. Use apenas o `.env.example` como referência.
-
----
-
-## Executando o Projeto
-
-### Opção 1 — Localmente (com `pnpm dev`)
-
-```bash
-pnpm dev
-```
-
-O servidor sobe em `http://localhost:3000` com hot-reload.
-
-### Opção 2 — Com Docker Compose
-
-Sobe a API **e** um PostgreSQL local, tudo isolado em containers:
-
-```bash
-docker compose up --build
-```
-
-Para derrubar:
-
-```bash
-docker compose down        # preserva os dados
-docker compose down -v     # apaga o volume do banco
-```
-
----
-
-## Documentação Interativa (Swagger)
-
-Com o servidor rodando, acesse:
-
-```
-http://localhost:3000/api-docs
-```
-
-O painel Swagger UI permite visualizar todos os endpoints, esquemas de entrada e testar requisições reais clicando em **Try it out**.
-
----
-
-## Endpoints
-
-Base URL: `http://localhost:3000`
-
-| Método   | Rota               | Descrição                   | Status de Sucesso |
-| -------- | ------------------ | --------------------------- | ----------------- |
-| `GET`    | `/health`          | Health check do servidor    | `200 OK`          |
-| `GET`    | `/ingredients`     | Lista todos os ingredientes | `200 OK`          |
-| `GET`    | `/ingredients/:id` | Busca um ingrediente por ID | `200 OK`          |
-| `POST`   | `/ingredients`     | Cria um novo ingrediente    | `201 Created`     |
-| `PUT`    | `/ingredients/:id` | Atualiza um ingrediente     | `200 OK`          |
-| `DELETE` | `/ingredients/:id` | Remove um ingrediente       | `204 No Content`  |
-
-### Exemplo de payload (POST / PUT)
-
-```json
-{
-  "name": "Camomila",
-  "price": 12.5,
-  "stock": 100,
-  "description": "Flor seca de camomila para chás calmantes",
-  "expiration": "2027-06-15"
-}
-```
-
-### Códigos de erro
-
-- `400 Bad Request` — campos obrigatórios ausentes ou inválidos
-- `404 Not Found` — ingrediente não encontrado
-- `500 Internal Server Error` — falha interna do servidor
-
----
-
-## Scripts Disponíveis
-
-| Comando          | Descrição                                              |
-| ---------------- | ------------------------------------------------------ |
-| `pnpm dev`       | Inicia o servidor em modo desenvolvimento (hot-reload) |
-| `pnpm build`     | Compila TypeScript para JavaScript em `dist/`          |
-| `pnpm start`     | Executa o build de produção (`node dist/server.js`)    |
-| `pnpm lint`      | Executa o ESLint em todo o projeto                     |
-| `pnpm format`    | Formata o código com Prettier                          |
-| `pnpm typecheck` | Valida tipos sem gerar arquivos (`tsc --noEmit`)       |
-
----
-
-## Estrutura do Projeto
-
-```
+```text
 Apothecary/
-├── .github/
-│   └── workflows/
-│       └── ci.yml              # Pipeline de CI (GitHub Actions)
-├── .husky/
-│   └── pre-commit              # Hook que roda lint + typecheck antes de commitar
-├── src/
-│   ├── config/
-│   │   ├── database.ts         # Conexão Sequelize com PostgreSQL
-│   │   └── swagger.ts          # Configuração do Swagger
-│   ├── controllers/
-│   │   └── IngredientController.ts
-│   ├── models/
-│   │   └── Ingredient.ts       # Model tipado do Sequelize
-│   ├── routes/
-│   │   └── IngredientRoutes.ts # Rotas + anotações OpenAPI
-│   ├── app.ts                  # Configuração do Express (middlewares + rotas)
-│   └── server.ts               # Ponto de entrada (bootstrap + listen)
-├── .dockerignore
-├── .env.example
-├── docker-compose.yml
-├── Dockerfile
-├── package.json
-├── pnpm-lock.yaml
-└── tsconfig.json
-```
+├── .github/            # Workflows de CI/CD (GitHub Actions)
+├── backend/            # API RESTful (Node.js, Express, TypeScript)
+├── frontend/           # Interface SPA (React, Vite, shadcn/ui)
+├── package.json        # Scripts globais do monorepo
+└── pnpm-workspace.yaml # Configuração do workspace do pnpm
 
----
+🚀 Como executar o projeto completo
+Pré-requisitos
+Node.js 20+
 
-## CI/CD
+pnpm (npm install -g pnpm)
 
-O pipeline do **GitHub Actions** (`.github/workflows/ci.yml`) é disparado automaticamente em cada `push` e `pull_request` para a branch `main`.
+Passo 1: Instalar dependências
+Na raiz do projeto, instale as dependências de ambos os projetos:
 
-Steps executados:
+bash
+pnpm install
+Passo 2: Configurar Variáveis de Ambiente
+Você precisará de dois arquivos .env, um para cada projeto.
 
-1. Checkout do repositório
-2. Setup do Node.js 20 e pnpm
-3. Instalação de dependências (`pnpm install --frozen-lockfile`)
-4. Lint (`pnpm lint`)
-5. Prettier (`pnpm format`)
-6. Validação de tipos (`pnpm typecheck`)
-7. Build (`pnpm build`)
+Backend: Copie backend/.env.example para backend/.env e preencha as credenciais do banco de dados (PostgreSQL/Supabase).
 
-Se qualquer step falhar, o workflow marca o commit como ❌ vermelho.
+Frontend: Crie um frontend/.env contendo a URL da API:
 
----
+env
+VITE_API_URL=http://localhost:3000
+Passo 3: Rodar a aplicação
+Na raiz do projeto, execute:
 
-## Docker
+bash
+pnpm dev
+Isso iniciará simultaneamente:
 
-O `Dockerfile` usa **multi-stage build**:
+O Backend na porta 3000 (com hot-reload).
 
-- **Stage 1 (`builder`)**: instala todas as dependências (incluindo dev) e compila TypeScript para JavaScript.
-- **Stage 2 (`runner`)**: instala apenas dependências de produção e copia o `dist/` gerado. Resultado: imagem final enxuta e sem código-fonte TypeScript.
+O Frontend na porta 5173 (acesse no navegador).
 
-O `docker-compose.yml` orquestra:
+(Para rodar apenas um dos projetos, use pnpm dev:backend ou pnpm dev:frontend).
 
-- **`db`**: PostgreSQL 16 (com volume `pgdata` para persistência)
-- **`api`**: aplicação Node compilada
-- Healthcheck garante que a API só sobe depois do banco estar pronto
-- A API se conecta ao banco pelo **nome do serviço** (`db`) na rede interna do Docker
+⚙️ Scripts do Monorepo
+Comando	Descrição
+pnpm dev	Roda o Frontend e o Backend simultaneamente.
+pnpm dev:backend	Roda apenas a API.
+pnpm dev:frontend	Roda apenas a interface SPA.
+pnpm build	Compila o TypeScript do Backend e gera o build do Frontend.
+pnpm lint	Executa o ESLint em ambos os projetos.
+pnpm typecheck	Valida a tipagem estática do TypeScript em ambos.
+🔄 CI/CD (Integração e Entrega Contínua)
+O repositório possui uma esteira automatizada configurada no GitHub Actions (.github/workflows/ci.yml).
 
----
+Integração Contínua (CI):
 
-## Licença
+Frontend: Roda lint e valida o build da aplicação React.
 
-Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](./LICENSE) para mais detalhes.
+Backend: Roda lint, valida a tipagem estrita e compila o código.
+
+Entrega Contínua (CD):
+
+Docker Build: Garante que a imagem Docker do backend constrói com sucesso.
+
+Deploy no Render: Dispara um Webhook para atualizar a API em produção no Render.com (apenas na branch main).
+
+📚 Documentação Específica
+Para detalhes aprofundados sobre cada parte do sistema, consulte as documentações individuais:
+
+Documentação do Backend (API)
+
+Documentação do Frontend (SPA)
