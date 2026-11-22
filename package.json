@@ -10,11 +10,13 @@
     "build:frontend": "cd frontend && pnpm build",
     "build": "pnpm build:backend && pnpm build:frontend",
     "lint": "cd backend && pnpm lint && cd ../frontend && pnpm lint",
-    "typecheck": "cd backend && pnpm typecheck && cd ../frontend && pnpm typecheck"
+    "typecheck": "cd backend && pnpm typecheck && cd ../frontend && pnpm typecheck",
+    "format": "pnpm --filter backend format && pnpm --filter frontend format"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "lint-staged": "^17.6.1"
+    "lint-staged": "^17.6.1",
+    "prettier": "^3.10.1"
   },
   "lint-staged": {
     "backend/**/*.{ts,js}": [

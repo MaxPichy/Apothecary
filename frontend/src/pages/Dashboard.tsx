@@ -71,7 +71,7 @@ export default function Dashboard() {
     stock: 0,
     expiration: '',
   });
-  
+
   const loadIngredients = async () => {
     try {
       const data = await api.getIngredients();
@@ -79,7 +79,7 @@ export default function Dashboard() {
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erro desconhecido ao carregar.');
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 

@@ -39,7 +39,8 @@ jobs:
         run: pnpm lint
 
       - name: Prettier
-        run: pnpm format
+        run: 
+          pnpm format
 
       - name: Typecheck
         run: pnpm typecheck
