@@ -1,0 +1,190 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/jetbrains-mono';
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================================
+   Kusuriya — Imperial Palette
+   ========================================= */
+:root {
+  /* Raw palette */
+  --kusuriya-bg: #f4f1ea;
+  --kusuriya-surface: #ffffff;
+  --kusuriya-ink: #2c2a29;
+  --kusuriya-imperial-purple: #4a3b52;
+  --kusuriya-jade: #3d6b5b;
+  --kusuriya-crimson: #8b2635;
+  --kusuriya-gold: #c09a5b;
+  --kusuriya-border: #d1c7b8;
+
+  /* shadcn / Tailwind token overrides */
+  --background: var(--kusuriya-bg);
+  --foreground: var(--kusuriya-ink);
+
+  --card: var(--kusuriya-surface);
+  --card-foreground: var(--kusuriya-ink);
+
+  --popover: var(--kusuriya-surface);
+  --popover-foreground: var(--kusuriya-ink);
+
+  --primary: var(--kusuriya-imperial-purple);
+  --primary-foreground: #e8e2d2;
+
+  --secondary: #ede8df;
+  --secondary-foreground: var(--kusuriya-ink);
+
+  --muted: #ede8df;
+  --muted-foreground: #7a7060;
+
+  --accent: var(--kusuriya-jade);
+  --accent-foreground: #ffffff;
+
+  --destructive: var(--kusuriya-crimson);
+  --destructive-foreground: #ffffff;
+
+  --border: var(--kusuriya-border);
+  --input: var(--kusuriya-border);
+  --ring: var(--kusuriya-gold);
+
+  --chart-1: var(--kusuriya-jade);
+  --chart-2: var(--kusuriya-gold);
+  --chart-3: var(--kusuriya-crimson);
+  --chart-4: var(--kusuriya-imperial-purple);
+  --chart-5: #2c2a29;
+
+  --radius: 0.625rem;
+
+  /* Sidebar tokens */
+  --sidebar: var(--kusuriya-imperial-purple);
+  --sidebar-foreground: #e8e2d2;
+  --sidebar-primary: var(--kusuriya-gold);
+  --sidebar-primary-foreground: var(--kusuriya-ink);
+  --sidebar-accent: rgba(192, 154, 91, 0.15);
+  --sidebar-accent-foreground: #e8e2d2;
+  --sidebar-border: var(--kusuriya-gold);
+  --sidebar-ring: var(--kusuriya-gold);
+}
+
+@theme inline {
+  --font-heading: 'Cinzel', serif;
+  --font-sans: 'Noto Serif JP', serif;
+  --font-mono: 'JetBrains Mono Variable', monospace;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ---- Base ---- */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Noto Serif JP', serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Cinzel', serif;
+    color: var(--kusuriya-imperial-purple);
+    letter-spacing: 0.05em;
+  }
+}
+
+/* ---- Parchment texture overlay ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--kusuriya-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--kusuriya-jade);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kusuriya-imperial-purple);
+}
+
+/* ---- Inputs / Textareas ---- */
+textarea,
+input[type='text'],
+input[type='number'],
+input[type='date'],
+input[type='email'] {
+  background-color: var(--kusuriya-surface) !important;
+  border: 1px solid var(--kusuriya-gold) !important;
+  color: var(--kusuriya-ink) !important;
+  font-family: 'Noto Serif JP', serif !important;
+  border-radius: 8px;
+}
+textarea:focus,
+input:focus {
+  outline: none !important;
+  border-color: var(--kusuriya-crimson) !important;
+  box-shadow: 0 0 0 2px rgba(139, 38, 53, 0.2) !important;
+}
+
+/* ---- Code blocks ---- */
+pre,
+code {
+  background-color: #2c2a29 !important;
+  color: #f4f1ea !important;
+  font-family: 'JetBrains Mono Variable', monospace !important;
+  border-radius: 6px;
+  border-left: 4px solid var(--kusuriya-jade);
+}
