@@ -18,6 +18,7 @@ app.use('/ingredients', IngredientRoutes);
 app.get('/health', (req: Request, res: Response) => {
   return res.status(200).json({
     message: 'Servidor rodando com sucesso.',
+    uptime: process.uptime(),
   });
 });
 

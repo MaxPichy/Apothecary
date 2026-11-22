@@ -1,26 +1,22 @@
-name: Apotecary CI
+name: Apotecary CI/CD
 
 on:
-  # Disparagens automáticas dos testes ao -> commit && pull request
   push:
     branches:
       - main
   pull_request:
     branches:
       - main
-  # Disparagem manual pelo Github Actions
   workflow_dispatch:
 
-# Permite cancelar execuções anteriores nas branches caso hajam novos commits
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # CI
   quality:
     runs-on: ubuntu-latest
-
-    # Fast-Fail
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,3 +46,32 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  # CD
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t apotecary-api:latest ./backend
+
+  # RENDER
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          # Faz o POST para o webhook e captura o código HTTP (200 ou 201)
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }})
+          echo "Deploy hook retornou status http: $HTTP_STATUS"
+          
+          # Se não for 200 ou 201, falha o pipeline
+          if [[ "$HTTP_STATUS" -ne 200 && "$HTTP_STATUS" -ne 201 ]]; then
+            echo "Error: Deploy hook falhou, status: $HTTP_STATUS"
+            exit 1
+          fi
