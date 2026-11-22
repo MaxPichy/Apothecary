@@ -1,52 +1,29 @@
 {
-  "name": "apothecary",
+  "name": "apotecary",
   "version": "1.0.0",
-  "description": "Apothecary REST API — Node.js, Express, Sequelize, PostgreSQL",
-  "main": "dist/server.js",
+  "private": true,
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "db:test": "tsx src/config/database.ts",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{ts,js}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "pg": "^8.11.5",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.3",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "dev:backend": "cd backend && pnpm dev",
+    "dev:frontend": "cd frontend && pnpm dev",
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "build:backend": "cd backend && pnpm build",
+    "build:frontend": "cd frontend && pnpm build",
+    "build": "pnpm build:backend && pnpm build:frontend",
+    "lint": "cd backend && pnpm lint && cd ../frontend && pnpm lint",
+    "typecheck": "cd backend && pnpm typecheck && cd ../frontend && pnpm typecheck"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.25",
-    "@types/node": "^22.5.0",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.6",
-    "eslint": "^9.9.0",
-    "eslint-config-prettier": "^9.1.2",
-    "globals": "^15.15.0",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.5.2",
-    "prettier": "^3.3.3",
-    "tsx": "^4.17.0",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.70.1"
+    "concurrently": "^9.1.2",
+    "lint-staged": "^17.6.1"
+  },
+  "lint-staged": {
+    "backend/**/*.{ts,js}": [
+      "pnpm --filter backend exec eslint --fix",
+      "pnpm --filter backend exec prettier --write"
+    ],
+    "frontend/**/*.{ts,tsx}": [
+      "pnpm --filter frontend exec eslint --fix",
+      "pnpm --filter frontend exec prettier --write"
+    ]
   }
 }
