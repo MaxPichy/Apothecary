@@ -102,3 +102,4 @@ Para detalhes aprofundados sobre cada parte do sistema, consulte as documentaç�
 
 - [Documentação do Backend (API)](./backend/README.md)
 - [Documentação do Frontend (SPA)](./frontend/README.md)
+- [Render - link público] https://apothecary-to1k.onrender.com
